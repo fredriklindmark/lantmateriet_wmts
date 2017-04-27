@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+  <title>Lantmäteriet WMTS</title>
+
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" integrity="sha512-07I2e+7D8p6he1SIM+1twR5TIrhUQn9+I6yjqD53JQjFiMf8EtC93ty0/5vJTZGF8aAocvHYNEDJajGdNx1IsQ=="
+    crossorigin="" />
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.4.3/proj4.js"></script>
+  <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js" integrity="sha512-A7vV8IFfih/D732iSSKi20u/ooOfj/AGehOKq0f4vLT1Zr2Y+RX7C+w8A1gaSasGtRUZpF/NZgzSAu4/Gc41Lg=="
+    crossorigin=""></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4leaflet/1.0.1/proj4leaflet.min.js"></script>
+
+</head>
+
+<body>
+
+  <div id="map" style="width: 600px; height: 400px;"></div>
+
+  <script>
+    proj4.defs("EPSG:3006", "+proj=utm +zone=33 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs");
+
+    var map = new L.Map('map', {
+      crs: new L.Proj.CRS('EPSG:3006',
+        '+proj=utm +zone=33 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs', {
+          resolutions: [
+            4096, 2048, 1024, 512, 256, 128, 64, 32, 16, 8, 4, 2, 1
+          ],
+          origin: [-1200000.000000, 8500000.000000],
+          bounds: L.bounds([-1200000.000000, 8500000.000000], [4305696.000000, 2994304.000000])
+        })
+    });
+
+    var layer = new L.tileLayer(
+      // Replace <token> with your token...
+      "https://api.lantmateriet.se/open/topowebb-ccby/v1/wmts/token/<token>/?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=topowebb&STYLE=default&TILEMATRIXSET=3006&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}&FORMAT=image%2Fpng", {
+        maxZoom: 9,
+        minZoom: 0
+      }).addTo(map);
+
+    map.setView([62, 15], 1);
+
+  </script>
+
+</body>
+</html>
